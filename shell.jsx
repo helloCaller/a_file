@@ -85,8 +85,39 @@ function Stepper({ steps, current }) {
   );
 }
 
+/* ---------- Centralised scale label arrays ---------- */
+const SCALES = {
+  ABILITY:    ['No ability yet', 'Some ability', 'Solid ability', 'Strong ability', 'Fully confident and skilled in this area'],
+  CONFIDENCE: ['Not at all confident', 'Slightly confident', 'Somewhat confident', 'Fairly confident', 'Very confident'],
+  PROGRESS:   ['No progress', 'Some progress', 'Good progress', 'Significant progress', 'Fully achieved'],
+  AGREEMENT:  ['Not at all', 'Slightly', 'Somewhat', 'Fairly', 'Absolutely'],
+  FREQUENCY:  ['Rarely', 'Occasionally', 'Sometimes', 'Often', 'Consistently'],
+  ALIGNMENT:  ['Not aligned', 'Slightly aligned', 'Somewhat aligned', 'Well aligned', 'Perfect match'],
+  STRENGTH:   ['Weak', 'Developing', 'Moderate', 'Good', 'Strong'],
+  VALUE:      ['Not valuable', 'Slightly valuable', 'Somewhat valuable', 'Quite valuable', 'Extremely valuable'],
+};
+
 /* ---------- Rating scale ---------- */
-function RatingScale({ value, onChange, max = 5, lowLabel, highLabel, compact, anchored }) {
+function RatingScale({ value, onChange, max = 5, lowLabel, highLabel, compact, anchored, vertical, labels }) {
+  if (vertical && labels) {
+    return (
+      <div className="rating-vertical">
+        {labels.map((label, i) => {
+          const n = i + 1;
+          return (
+            <button
+              key={n}
+              className={'rating-vertical-row ' + (value === n ? 'selected' : '')}
+              onClick={() => onChange(n)}>
+              <span className={'rating-btn compact ' + (value === n ? 'selected' : '')}>{n}</span>
+              <span className="rating-vertical-label">{label}</span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
   const wide = max > 5;
   const buttons = (
     <div className={'rating ' + (wide ? 'wide' : '')}>
@@ -150,18 +181,13 @@ function QLabel({ children, optional }) {
 }
 
 /* ---------- Wizard footer with autosave indicator ---------- */
-function WizardFooter({ onBack, onNext, nextLabel = 'Next', nextDisabled, primary = true, autosaveLabel }) {
+function WizardFooter({ onBack, onNext, nextLabel = 'Next', nextDisabled, primary = true }) {
   return (
     <div className="wizard-footer">
       <div className="wizard-footer-left">
         <button className="btn btn-secondary" onClick={onBack}>
           <I.ChevronLeft size={16}/> Previous
         </button>
-        {autosaveLabel && (
-          <span className="autosave-label">
-            <I.Check size={13}/> {autosaveLabel}
-          </span>
-        )}
       </div>
       <button
         className={'btn ' + (primary ? 'btn-primary' : 'btn-secondary')}
@@ -173,4 +199,4 @@ function WizardFooter({ onBack, onNext, nextLabel = 'Next', nextDisabled, primar
   );
 }
 
-Object.assign(window, { Sidebar, Stepper, RatingScale, Segmented, QLabel, WizardFooter, AtriumLogo });
+Object.assign(window, { Sidebar, Stepper, RatingScale, SCALES, Segmented, QLabel, WizardFooter, AtriumLogo });

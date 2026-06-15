@@ -15,8 +15,8 @@
   --ice: #cddcfa;
   --border: rgba(10, 10, 20, 0.08);
   --border-strong: rgba(10, 10, 20, 0.16);
-  --muted: rgba(10, 10, 20, 0.56);
-  --muted-2: rgba(10, 10, 20, 0.4);
+  --muted: rgba(10, 10, 20, 0.65);
+  --muted-2: rgba(10, 10, 20, 0.58);
 }
 
 * { box-sizing: border-box; }
@@ -243,6 +243,18 @@ input, textarea, select { font-family: inherit; color: inherit; }
   background: var(--white);
   border-radius: 24px;
   padding: 40px 44px;
+  position: relative;
+}
+.card-autosave {
+  position: absolute;
+  top: 16px;
+  left: 44px;
+  font-size: 12px;
+  color: var(--muted-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  animation: fadeIn 200ms ease;
 }
 
 /* ---------- Stepper (progress bar with labels) ---------- */
@@ -428,6 +440,30 @@ input, textarea, select { font-family: inherit; color: inherit; }
 }
 .rating-anchored .anchor.right { text-align: right; }
 .rating-anchored .rating { gap: 10px; flex: none; }
+
+/* Vertical rating scale */
+.rating-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+.rating-vertical-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  padding: 2px 0;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+.rating-vertical-label {
+  font-size: 15px;
+  color: var(--black);
+  font-weight: 500;
+}
 
 
 /* ---------- Text input ---------- */
@@ -1005,6 +1041,142 @@ input, textarea, select { font-family: inherit; color: inherit; }
   font-weight: 600;
   letter-spacing: -0.02em;
   margin: 0 0 4px;
+}
+
+/* ---------- Dashboard ---------- */
+.dashboard-page {
+  margin: -32px -40px -60px;
+}
+
+/* Sprint Progress section */
+.dash-sprint {
+  padding: 32px 40px;
+  background: #f9f5f3;
+}
+.dash-heading {
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 4px;
+  line-height: 1.1;
+}
+.dash-sub {
+  font-size: 14.5px;
+  color: var(--muted);
+  margin: 0 0 18px;
+}
+
+/* Session tabs */
+.dash-session-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+  pointer-events: none;
+}
+.dash-session-tab {
+  flex: 1;
+  padding: 14px 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--black);
+  text-align: center;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+}
+.dash-session-tab:first-child { border-left: 1px solid var(--border); }
+.dash-session-tab.active {
+  color: var(--cobalt);
+  border-bottom-color: var(--cobalt);
+}
+
+/* Bookings section */
+.dash-bookings {
+  background: var(--ice);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.dash-bookings-inner {
+  padding: 32px 40px;
+}
+.dash-bookings-label {
+  font-size: 14.5px;
+  font-weight: 600;
+  margin: 0 0 14px;
+  color: var(--black);
+}
+.dash-bookings-blocked {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: var(--black);
+  max-width: 420px;
+  line-height: 1.4;
+}
+
+/* Recent Sessions */
+.dash-recent {
+  padding: 32px 40px 60px;
+  background: #f9f5f3;
+}
+.dash-recent-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+.dash-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: var(--white);
+  color: var(--muted);
+}
+.dash-search-input {
+  border: none;
+  background: none;
+  font-size: 14px;
+  outline: none;
+  width: 180px;
+  color: var(--black);
+}
+.dash-search-input::placeholder { color: var(--muted); }
+
+/* Table */
+.dash-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--white);
+}
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.dash-th {
+  background: var(--beige-1);
+  padding: 11px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid var(--border);
+}
+.dash-th:not(:last-child) {
+  border-right: 1px solid var(--border);
+}
+.dash-empty {
+  text-align: center;
+  padding: 48px;
+  color: var(--muted);
+  font-size: 15px;
 }
 
 /* ---------- Tweaks panel styling overrides ---------- */

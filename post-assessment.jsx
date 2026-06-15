@@ -1,6 +1,6 @@
 /* Post-Assessment — Part II (4 steps, copy from impact-assessment doc) */
 
-const POST_STEPS = ['Post-assessment', 'Expert Match', 'Program Feedback', "What's Next"];
+const POST_STEPS = ['Leadership Growth and Impact', 'Expert Match', 'Atrium Feedback', "What's Next"];
 
 const POST_GOALS = [
   { id: 'g1', name: 'Drive operational excellence in HR' },
@@ -97,12 +97,12 @@ function PostAssessment({ onExit, onComplete, onSaveDraft }) {
 
   return (
     <div className="card">
-        <div className="context-hint" style={{ marginBottom: 22 }}>
+        {step === 0 && <div className="context-hint" style={{ marginBottom: 22 }}>
           <I.Info size={16}/>
           <span>
             Your responses and your manager's responses will be combined into a shared report to support an open and transparent conversation about progress and next steps.
           </span>
-        </div>
+        </div>}
 
         <Stepper steps={POST_STEPS} current={step}/>
 
@@ -132,7 +132,6 @@ function StepImpact({ data, update }) {
     <div>
       <InlineQ>
         <QLabel>Did you make progress on your development goals?</QLabel>
-        <p className="q-help">Scale: 1 = No progress · 2 = Some progress · 3 = Good progress · 4 = Significant progress · 5 = Fully achieved</p>
         <div className="rating-group">
           {POST_GOALS.map((g, i) => (
             <div key={g.id} className="rating-group-item">
@@ -140,14 +139,14 @@ function StepImpact({ data, update }) {
               <RatingScale
                 value={data.progress[g.id]}
                 onChange={(v) => update({ progress: { ...data.progress, [g.id]: v } })}
-                compact/>
+                vertical labels={SCALES.PROGRESS}/>
             </div>
           ))}
         </div>
       </InlineQ>
 
       <InlineQ>
-        <QLabel>Any valuable skills, insights, or mindset shifts?</QLabel>
+        <QLabel>What are the most valuable skills, insights, or mindset shifts you gained?</QLabel>
         <textarea
           className="textarea"
           rows="3"
@@ -158,79 +157,10 @@ function StepImpact({ data, update }) {
 
       <InlineQ>
         <QLabel>Do you feel more confident in your role?</QLabel>
-        <p className="q-help">Scale: 1 = Not at all · 2 = Slightly · 3 = Somewhat · 4 = Fairly · 5 = Absolutely</p>
         <RatingScale
           value={data.roleConfidence}
           onChange={(v) => update({ roleConfidence: v })}
-          compact/>
-      </InlineQ>
-
-      <InlineQ>
-        <QLabel>How often have you applied what you learned with Mac?</QLabel>
-        <p className="q-help">Scale: 1 = Rarely · 2 = Occasionally · 3 = Sometimes · 4 = Often · 5 = Consistently</p>
-        <RatingScale
-          value={data.application}
-          onChange={(v) => update({ application: v })}
-          compact/>
-      </InlineQ>
-
-      <InlineQ>
-        <QLabel>Can you share an example of when you put what you learned into action?</QLabel>
-        <textarea
-          className="textarea"
-          rows="3"
-          placeholder="A moment, decision, or conversation…"
-          value={data.applicationExample}
-          onChange={e => update({ applicationExample: e.target.value })}/>
-      </InlineQ>
-
-      <InlineQ>
-        <QLabel>Which business outcomes from your development plan were achieved?</QLabel>
-        <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 12 }}>
-          Select all that apply.
-        </div>
-        {PROGRAM_OUTCOMES.map(o => {
-          const sel = data.outcomesAchieved.includes(o.id);
-          return (
-            <div key={o.id}
-                 className={'choice ' + (sel ? 'selected' : '')}
-                 onClick={() => toggle(o.id)}>
-              <div className="choice-box">
-                {sel && <I.Check size={14}/>}
-              </div>
-              <div>{o.label}</div>
-            </div>
-          );
-        })}
-        <div className={'choice ' + (data.outcomesAchieved.includes('other') ? 'selected' : '')}
-             onClick={() => toggle('other')}>
-          <div className="choice-box">
-            {data.outcomesAchieved.includes('other') && <I.Check size={14}/>}
-          </div>
-          <div>Other</div>
-        </div>
-        {data.outcomesAchieved.includes('other') && (
-          <input
-            className="text-input"
-            style={{ marginTop: 8 }}
-            placeholder="Describe the outcome…"
-            value={data.otherOutcome}
-            onChange={e => update({ otherOutcome: e.target.value })}
-            onClick={e => e.stopPropagation()}/>
-        )}
-      </InlineQ>
-
-      <InlineQ>
-        <QLabel>What feedback have you received from your team or stakeholders?</QLabel>
-        <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 10 }}>
-          e.g. changes they've noticed, ways you've improved
-        </div>
-        <textarea
-          className="textarea"
-          rows="3"
-          placeholder="Write a sentence or two…"
-          value={data.stakeholderFeedback}
-          onChange={e => update({ stakeholderFeedback: e.target.value })}/>
+          vertical labels={SCALES.AGREEMENT}/>
       </InlineQ>
     </div>
   );
@@ -243,9 +173,9 @@ function InlineQ({ children }) {
 /* ---------- Step 2: Expert match ---------- */
 function StepExpert({ data, update }) {
   const fields = [
-    { key: 'expertAlignment', label: "How well did Mac's experience align with what you needed?", scale: '1 = Not aligned · 2 = Slightly aligned · 3 = Somewhat aligned · 4 = Well aligned · 5 = Perfect match' },
-    { key: 'expertChemistry', label: 'How strong was the chemistry and trust between you and Mac?', scale: '1 = Weak · 2 = Developing · 3 = Moderate · 4 = Good · 5 = Strong' },
-    { key: 'expertValue', label: 'How valuable was the mentorship, coaching, and guidance Mac provided?', scale: '1 = Not valuable · 2 = Slightly valuable · 3 = Somewhat valuable · 4 = Quite valuable · 5 = Extremely valuable' },
+    { key: 'expertAlignment', label: "How well did Mac's experience align with what you needed?", scale: SCALES.ALIGNMENT },
+    { key: 'expertChemistry', label: 'How strong was the chemistry and trust between you and Mac?', scale: SCALES.STRENGTH },
+    { key: 'expertValue', label: 'How valuable was the mentorship, coaching, and guidance Mac provided?', scale: SCALES.VALUE },
   ];
   return (
     <div>
@@ -267,11 +197,10 @@ function StepExpert({ data, update }) {
       {fields.map((f) => (
         <InlineQ key={f.key}>
           <QLabel>{f.label}</QLabel>
-          <p className="q-help">Scale: {f.scale}</p>
           <RatingScale
             value={data[f.key]}
             onChange={(v) => update({ [f.key]: v })}
-            compact/>
+            vertical labels={f.scale}/>
         </InlineQ>
       ))}
     </div>

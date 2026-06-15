@@ -10,7 +10,7 @@ function CompletionView({ kind, onBack, onStartNext }) {
           <div className="success-icon">
             <I.Check size={36}/>
           </div>
-          <h2 className="success-title serif">Pre-assessment captured.</h2>
+          <h2 className="success-title">Pre-assessment captured.</h2>
           <p className="success-sub">
             Your responses will be combined with your manager's into a shared report at the end of the sprint to support an open and transparent conversation about progress and next steps.
           </p>
@@ -44,7 +44,7 @@ function CompletionView({ kind, onBack, onStartNext }) {
         <div className="success-icon">
           <I.Check size={36}/>
         </div>
-        <h2 className="success-title serif">Post-assessment captured.</h2>
+        <h2 className="success-title">Post-assessment captured.</h2>
         <p className="success-sub">
           Your responses will be combined with your manager's into a shared report to support an open and transparent conversation about your progress and next steps.
         </p>

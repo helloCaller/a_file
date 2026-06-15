@@ -266,7 +266,7 @@ function FinalReportsPage() {
   return (
     <div>
       <div className="main-header">
-        <h1 className="main-title">Final Reports</h1>
+        <h2 className="dash-heading">Final Reports</h2>
       </div>
       <div className="reports-layout">
 

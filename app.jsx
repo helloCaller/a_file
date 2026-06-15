@@ -18,20 +18,22 @@ const FONT_PRESETS = {
 };
 
 function App() {
-  const [view, setView] = React.useState('assessments');
-  const [tab, setTab] = React.useState('pre');
+  const [view, setView] = React.useState('dashboard');
+  const hasPostParam = new URLSearchParams(location.search).has('post');
+  const [tab, setTab] = React.useState(hasPostParam ? 'post' : 'pre');
   const [preDone, setPreDone] = React.useState(false);
-  const [postLocked, setPostLocked] = React.useState(true);
+  const [postLocked, setPostLocked] = React.useState(!hasPostParam);
   const [postDone, setPostDone] = React.useState(false);
   const [resetKey, setResetKey] = React.useState(0);
   const [toast, setToast] = React.useState(null);
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
 
-  // Console toggle for testing: unlockPost() / lockPost()
+  // Console helpers for testing
   React.useEffect(() => {
     window.unlockPost = () => setPostLocked(false);
     window.lockPost   = () => setPostLocked(true);
-    return () => { delete window.unlockPost; delete window.lockPost; };
+    window.goPost     = () => { setPostLocked(false); setTab('post'); };
+    return () => { delete window.unlockPost; delete window.lockPost; delete window.goPost; };
   }, []);
 
   React.useEffect(() => {
@@ -57,10 +59,14 @@ function App() {
       <Sidebar current={view} onNav={(id) => setView(id)}/>
       <main className="main">
 
+        {view === 'dashboard' && (
+          <DashboardPage onNav={setView} preDone={preDone}/>
+        )}
+
         {view === 'assessments' && (
           <>
             <div className="main-header">
-              <h1 className="main-title">Assessments</h1>
+              <h2 className="dash-heading">Assessments</h2>
             </div>
 
             <div className="sprint-context">
@@ -105,7 +111,7 @@ function App() {
 
         {view === 'final-reports' && <FinalReportsPage/>}
 
-        <AssessmentsTweaks t={t} setTweak={setTweak}/>
+        <AssessmentsTweaks t={t} setTweak={setTweak} postLocked={postLocked} onGoPost={() => { setPostLocked(false); setTab('post'); }}/>
       </main>
 
       {toast && (
@@ -131,9 +137,14 @@ function LockedAssessment() {
   );
 }
 
-function AssessmentsTweaks({ t, setTweak }) {
+function AssessmentsTweaks({ t, setTweak, postLocked, onGoPost }) {
   return (
     <TweaksPanel title="Tweaks">
+      {postLocked && (
+        <TweakSection title="Nav">
+          <TweakButton label="Go to Post-assessment" onClick={onGoPost}/>
+        </TweakSection>
+      )}
       <TweakSection title="Color">
         <TweakColor
           label="Accent"

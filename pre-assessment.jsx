@@ -1,6 +1,6 @@
-/* Pre-Assessment — Part I (3 steps, copy from impact-assessment doc) */
+/* Pre-Assessment — Part I */
 
-const PRE_STEPS = ['Goals and Ability', 'Confidence', 'Challenge and Support', 'Anything Else'];
+const PRE_STEPS = ['Goals and Confidence', 'Support'];
 const PRE_DRAFT_KEY = 'atrium-pre-assessment-draft';
 
 const DEV_GOALS = [
@@ -19,14 +19,11 @@ function PreAssessment({ onExit, onComplete }) {
       const saved = localStorage.getItem(PRE_DRAFT_KEY);
       return saved ? JSON.parse(saved) : {
         abilities: {},
-        progressConfidence: null,
-        biggestChallenge: '',
         roleConfidence: null,
         stayOnTrack: '',
-        finalThoughts: '',
       };
     } catch {
-      return { abilities: {}, progressConfidence: null, biggestChallenge: '', roleConfidence: null, stayOnTrack: '', finalThoughts: '' };
+      return { abilities: {}, roleConfidence: null, stayOnTrack: '' };
     }
   });
 
@@ -57,46 +54,48 @@ function PreAssessment({ onExit, onComplete }) {
     else onExit && onExit();
   };
 
-  // All questions required (per latest direction)
   const canAdvance = () => {
-    if (step === 0) return DEV_GOALS.every(g => data.abilities[g.id]) && !!data.progressConfidence;
-    if (step === 1) return !!data.roleConfidence;
-    if (step === 2) return true;
-    if (step === 3) return true;
+    if (step === 0) return DEV_GOALS.every(g => data.abilities[g.id]) && !!data.roleConfidence;
     return true;
   };
 
   return (
     <div>
       <div className="card">
+        {autosaveLabel && (
+          <span className="card-autosave">
+            <I.Check size={13}/> {autosaveLabel}
+          </span>
+        )}
         <Stepper steps={PRE_STEPS} current={step}/>
 
-        {step === 0 && <StepGoalsAbility data={data} update={update}/>}
-        {step === 1 && <StepConfidenceProgress data={data} update={update}/>}
-        {step === 2 && <StepConfidenceRole data={data} update={update}/>}
-        {step === 3 && <StepFinalThoughts data={data} update={update}/>}
+        {step === 0 && <StepGoalsConfidence data={data} update={update}/>}
+        {step === 1 && <StepSupport data={data} update={update}/>}
 
         <WizardFooter
           onBack={back}
           onNext={next}
           nextLabel={step === PRE_STEPS.length - 1 ? 'Submit Pre-assessment' : 'Next'}
           nextDisabled={!canAdvance()}
-          autosaveLabel={autosaveLabel}
         />
       </div>
     </div>
   );
 }
 
-/* ---------- Step 1 ---------- */
-function StepGoalsAbility({ data, update }) {
+/* ---------- Step 1: Goals and Confidence ---------- */
+function StepGoalsConfidence({ data, update }) {
   const setAbility = (gid, v) => update({ abilities: { ...data.abilities, [gid]: v } });
   return (
     <div>
-      <QLabel>How would you rate your current abilities for each development goal?</QLabel>
-      <p className="q-help">
-        Scale: 1 = No ability yet · 2 = Some ability · 3 = Solid ability · 4 = Strong ability · 5 = Fully confident and skilled
-      </p>
+      <div className="context-hint" style={{ marginBottom: 22 }}>
+        <I.Info size={16}/>
+        <span>
+          Your responses and your manager's responses will be combined into a shared report at the end of the sprint to support an open and transparent conversation about progress and next steps.
+        </span>
+      </div>
+
+      <QLabel>How would you rate your current abilities for each goal?</QLabel>
       <div className="rating-group">
         {DEV_GOALS.map((g, i) => (
           <div key={g.id} className="rating-group-item">
@@ -104,41 +103,24 @@ function StepGoalsAbility({ data, update }) {
             <RatingScale
               value={data.abilities[g.id]}
               onChange={(v) => setAbility(g.id, v)}
-              compact/>
+              vertical labels={SCALES.ABILITY}/>
           </div>
         ))}
       </div>
 
       <div style={{ marginTop: 32 }}>
-        <QLabel>How confident are you in making progress on these goals right now?</QLabel>
-        <p className="q-help">Scale: 1 = Not at all confident · 2 = Slightly confident · 3 = Somewhat confident · 4 = Fairly confident · 5 = Very confident</p>
-        <RatingScale
-          value={data.progressConfidence}
-          onChange={(v) => update({ progressConfidence: v })}
-          compact/>
-      </div>
-    </div>
-  );
-}
-
-/* ---------- Step 2 ---------- */
-function StepConfidenceProgress({ data, update }) {
-  return (
-    <div>
-      <div>
         <QLabel>How confident do you feel in your role today?</QLabel>
-        <p className="q-help">Scale: 1 = Not at all confident · 2 = Slightly confident · 3 = Somewhat confident · 4 = Fairly confident · 5 = Very confident</p>
         <RatingScale
           value={data.roleConfidence}
           onChange={(v) => update({ roleConfidence: v })}
-          compact/>
+          vertical labels={SCALES.CONFIDENCE}/>
       </div>
     </div>
   );
 }
 
-/* ---------- Step 3 ---------- */
-function StepConfidenceRole({ data, update }) {
+/* ---------- Step 2: Support ---------- */
+function StepSupport({ data, update }) {
   return (
     <div>
       <div>
@@ -157,21 +139,6 @@ function StepConfidenceRole({ data, update }) {
           At the end of your program sprint, you'll complete a post-assessment to track progress, capture impact, and uncover new areas to keep your development personalized and outcome-driven.
         </span>
       </div>
-    </div>
-  );
-}
-
-/* ---------- Step 4 ---------- */
-function StepFinalThoughts({ data, update }) {
-  return (
-    <div>
-      <QLabel optional>That was a lot — we appreciate everything you shared. Did we miss anything, or is there anything else you'd like to add?</QLabel>
-      <textarea
-        className="textarea"
-        rows="4"
-        placeholder="Add anything else here…"
-        value={data.finalThoughts}
-        onChange={e => update({ finalThoughts: e.target.value })}/>
     </div>
   );
 }
