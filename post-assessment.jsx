@@ -65,11 +65,7 @@ function PostAssessment({ onExit, onComplete, onSaveDraft }) {
     if (step === 0) {
       return POST_GOALS.every(g => data.progress[g.id])
         && filled(data.insight)
-        && data.roleConfidence
-        && data.application
-        && filled(data.applicationExample)
-        && data.outcomesAchieved.length > 0
-        && filled(data.stakeholderFeedback);
+        && data.roleConfidence;
     }
     if (step === 1) return data.expertAlignment && data.expertChemistry && data.expertValue;
     if (step === 2) {
