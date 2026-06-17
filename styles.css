@@ -1046,6 +1046,9 @@ input, textarea, select { font-family: inherit; color: inherit; }
 /* ---------- Dashboard ---------- */
 .dashboard-page {
   margin: -32px -40px -60px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh);
 }
 
 /* Sprint Progress section */
@@ -1119,6 +1122,7 @@ input, textarea, select { font-family: inherit; color: inherit; }
 .dash-recent {
   padding: 32px 40px 60px;
   background: #f9f5f3;
+  flex: 1;
 }
 .dash-recent-header {
   display: flex;
