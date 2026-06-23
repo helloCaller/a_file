@@ -128,7 +128,7 @@ function StepSupport({ data, update }) {
         <textarea
           className="textarea"
           rows="4"
-          placeholder={"What's one thing that would help you stay on track during this program sprint?\n\nWhat are any challenges?"}
+          placeholder="What's one thing that would help you stay on track during this sprint?"
           value={data.stayOnTrack}
           onChange={e => update({ stayOnTrack: e.target.value })}/>
       </div>

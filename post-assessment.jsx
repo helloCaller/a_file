@@ -82,7 +82,7 @@ function PostAssessment({ onExit, onComplete, onSaveDraft }) {
         const goalsOk = data.planGoals.length > 0
           && data.planGoals.every(g => filled(g.name) && filled(g.context));
         const outcomesOk = data.planOutcomes.filter(o => filled(o)).length >= 2;
-        const planOk = goalsOk && filled(data.planBusinessNeed) && outcomesOk && data.sameExpert;
+        const planOk = goalsOk && outcomesOk && data.sameExpert;
         const otherOk = data.sameExpert === 'other' ? filled(data.sameExpertOther) : true;
         return planOk && otherOk;
       }
@@ -142,7 +142,7 @@ function StepImpact({ data, update }) {
       </InlineQ>
 
       <InlineQ>
-        <QLabel>What are the most valuable skills, insights, or mindset shifts you gained?</QLabel>
+        <QLabel>What the most valuable skill, insight, or mindset shift you gained?</QLabel>
         <textarea
           className="textarea"
           rows="3"
@@ -156,7 +156,7 @@ function StepImpact({ data, update }) {
         <RatingScale
           value={data.roleConfidence}
           onChange={(v) => update({ roleConfidence: v })}
-          vertical labels={SCALES.AGREEMENT}/>
+          vertical labels={['Not at all', 'Slightly', 'Noticeably', 'Significantly', 'Completely']}/>
       </InlineQ>
     </div>
   );
@@ -411,25 +411,10 @@ function StepWhatsNext({ data, update }) {
             )}
           </div>
 
-          {/* Section 2: Aligned with business needs */}
+          {/* Section 2: Impact & outcomes */}
           <div className="plan-section">
             <div className="plan-section-head">
               <span className="plan-section-num">02 —</span>
-              <span className="plan-section-title">Aligned with business needs</span>
-            </div>
-            <p className="plan-section-help">Why does this matter right now?</p>
-            <textarea
-              className="textarea"
-              rows="4"
-              placeholder="What is happening across the business, team, or broader market that makes this important now? e.g. rapid growth · shifting priorities · market pressure · restructuring · new leadership expectations · scaling challenges · operational gaps"
-              value={data.planBusinessNeed}
-              onChange={e => update({ planBusinessNeed: e.target.value })}/>
-          </div>
-
-          {/* Section 3: Impact & outcomes */}
-          <div className="plan-section">
-            <div className="plan-section-head">
-              <span className="plan-section-num">03 —</span>
               <span className="plan-section-title">Impact and outcomes</span>
             </div>
             <p className="plan-section-help">
@@ -477,7 +462,7 @@ function StepWhatsNext({ data, update }) {
           {/* Section 4: Expert match */}
           <div className="plan-section">
             <div className="plan-section-head">
-              <span className="plan-section-num">04 —</span>
+              <span className="plan-section-num">03 —</span>
               <span className="plan-section-title">Expert match</span>
             </div>
             <p className="plan-section-help">What would you like to do for the next sprint?</p>
